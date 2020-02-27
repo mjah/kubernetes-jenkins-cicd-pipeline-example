@@ -1,3 +1,1 @@
-# kubernetes-jenkins-cicd-pipeline-example
-
-Check this repo out on [GitLab](https://gitlab.com/mjah/kubernetes-jenkins-cicd-pipeline-example).
+# CI/CD Pipeline Example with Kubernetes and Jenkins
