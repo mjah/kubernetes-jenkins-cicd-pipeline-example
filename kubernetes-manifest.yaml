@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: helloworld
+  namespace: {{NAMESPACE}}
+  labels:
+    app: helloworld
+spec:
+  ports:
+  - name: http
+    port: 9094
+    targetPort: 9094
+  selector:
+    app: helloworld
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: helloworld
+  namespace: {{NAMESPACE}}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: helloworld
+        version: v1
+    spec:
+      containers:
+      - name: helloworld
+        ports:
+        - containerPort: 9094
+        image: {{PULL_IMAGE}}
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: 200m
+            memory: 256Mi
+          requests:
+            cpu: 50m
+            memory: 64Mi
+      imagePullSecrets:
+      - name: {{PULL_SECRET}}
