@@ -84,7 +84,7 @@ kubectl certificate approve ${REQUEST_ID}
 kubectl get csr ${REQUEST_ID} -o jsonpath='{.status.certificate}' \
     | base64 ${BASE64_DECODE_FLAG} > server.crt
 
-kubectl -n kube-system exec $(kubectl get pods -n kube-system -l k8s-app=kube-dns  -o jsonpath='{.items[0].metadata.name}') -c kubedns -- /bin/cat /var/run/secrets/kubernetes.io/serviceaccount/ca.crt > ca.crt
+kubectl -n kube-system exec $(kubectl get pods -n kube-system -l k8s-app=kube-dns  -o jsonpath='{.items[0].metadata.name}') -c kubedns -- /bin/cat /var/run/secrets/kubernetes.io/serviceaccount/ca.crt | cat > ca.crt
 
 # Extract cluster IP from the current context
 CURRENT_CONTEXT=$(kubectl config current-context)
@@ -97,7 +97,6 @@ clusters:
 - cluster:
     certificate-authority-data: $(cat ca.crt | base64 ${BASE64_WRAP_FLAG})
     server: ${CURRENT_CLUSTER_ADDR}
-    insecure-skip-tls-verify: true
   name: k8s
 contexts:
 - context:
