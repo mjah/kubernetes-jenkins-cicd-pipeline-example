@@ -9,7 +9,7 @@ def IMAGE_BRANCH_TAG = "${IMAGE_REGISTRY}:${env.BRANCH_NAME}"
 def REGISTRY_CREDENTIALS = 'github-mjah'
 def CLUSTER_CREDENTIALS = 'cluster-1-kubeconfig'
 
-def DEPLOYMENT_FILE = 'kubernetes-manifest.yaml'
+def KUBERNETES_MANIFEST = 'kubernetes-manifest.yaml'
 def STAGING_NAMESPACE = 'staging'
 def PRODUCTION_NAMESPACE = 'production'
 def PULL_SECRET = "registry-${REGISTRY_CREDENTIALS}"
@@ -108,7 +108,7 @@ pipeline {
                 -e "s|{{NAMESPACE}}|${STAGING_NAMESPACE}|g" \
                 -e "s|{{PULL_IMAGE}}|${IMAGE_BRANCH_TAG}.${env.GIT_COMMIT[0..6]}|g" \
                 -e "s|{{PULL_SECRET}}|${PULL_SECRET}|g" \
-                ${DEPLOYMENT_FILE} \
+                ${KUBERNETES_MANIFEST} \
                 | kubectl apply -f -
                 """
               }
@@ -151,7 +151,7 @@ pipeline {
                 -e "s|{{NAMESPACE}}|${PRODUCTION_NAMESPACE}|g" \
                 -e "s|{{PULL_IMAGE}}|${IMAGE_BRANCH_TAG}.${env.GIT_COMMIT[0..6]}|g" \
                 -e "s|{{PULL_SECRET}}|${PULL_SECRET}|g" \
-                ${DEPLOYMENT_FILE} \
+                ${KUBERNETES_MANIFEST} \
                 | kubectl apply -f -
                 """
               }
