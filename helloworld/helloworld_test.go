@@ -28,7 +28,7 @@ func TestHelloWorld(t *testing.T) {
 	}
 
 	// Check the response body is what we expect.
-	expected := `Hello World. Current URL path: /test`
+	expected := `Hello World! Current URL path: /test`
 	if rr.Body.String() != expected {
 		t.Errorf("Handler returned unexpected body: got %v want %v",
 			rr.Body.String(), expected)

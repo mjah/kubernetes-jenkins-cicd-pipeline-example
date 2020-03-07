@@ -307,7 +307,7 @@ pipeline {
         stage('Build Docker Image') {
           steps {
             container('docker') {
-              sh "docker build -t ${IMAGE_BRANCH_TAG} ."
+              sh "docker build -t ${IMAGE_BRANCH_TAG}.${env.GIT_COMMIT[0..6]} ."
             }
           }
         }
@@ -322,9 +322,9 @@ pipeline {
               ]) {
                 sh """
                 echo ${REGISTRY_PASS} | docker login ${REGISTRY_URL} -u ${REGISTRY_USER} --password-stdin
-                docker push ${IMAGE_BRANCH_TAG}
-                docker tag ${IMAGE_BRANCH_TAG} ${IMAGE_BRANCH_TAG}.${env.GIT_COMMIT[0..6]}
                 docker push ${IMAGE_BRANCH_TAG}.${env.GIT_COMMIT[0..6]}
+                docker tag ${IMAGE_BRANCH_TAG}.${env.GIT_COMMIT[0..6]} ${IMAGE_BRANCH_TAG}
+                docker push ${IMAGE_BRANCH_TAG}
                 """
               }
             }
@@ -467,7 +467,7 @@ pipeline {
 
 ## 8. Conclusion
 
-In conclusion, this example should provide a simple straightforward method for a CI/CD workflow. You can see the full example of the Jenkinsfile for GitHub [here](https://github.com/mjah/kubernetes-jenkins-cicd-pipeline-example/blob/master/README.md) and for GitLab [here](https://gitlab.com/mjah/kubernetes-jenkins-cicd-pipeline-example/-/blob/master/Jenkinsfile).
+In conclusion, this example should provide a simple straightforward method for a CI/CD workflow. You can see the full example of the Jenkinsfile for GitHub [here](https://github.com/mjah/kubernetes-jenkins-cicd-pipeline-example/blob/master/Jenkinsfile) and for GitLab [here](https://gitlab.com/mjah/kubernetes-jenkins-cicd-pipeline-example/-/blob/master/Jenkinsfile).
 
 ## 9. Useful Links
 

@@ -7,7 +7,7 @@ import (
 
 // HelloWorld functions responds with Hello World and the current URL path
 func HelloWorld(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello World. Current URL path: %s", r.URL.Path)
+	fmt.Fprintf(w, "Hello World! Current URL path: %s", r.URL.Path)
 }
 
 // main is the entry point which runs the Hello World server
