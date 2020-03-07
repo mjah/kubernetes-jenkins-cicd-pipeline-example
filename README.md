@@ -21,7 +21,7 @@
   * [7.1 Define Constants](#71-define-constants)
   * [7.2 Build and Store Docker Image](#72-build-and-store-docker-image)
   * [7.3 Deploy to Cluster](#73-deploy-to-cluster)
-  * [7.4 Build status](#74-build-status)
+  * [7.4 Build Status](#74-build-status)
 * [8. Conclusion](#8-conclusion)
 * [9. Useful Links](#9-useful-links)
 
@@ -77,15 +77,23 @@ helm install jenkins stable/jenkins \
 
 ## 3. Set up Docker Host
 
-To build docker images, we will first need to run a Docker-in-Docker daemon container in a Kubernetes pod. This service will be used as the Docker host.
+To build docker images, we will first need to run a Docker-in-Docker daemon container in a Kubernetes pod. This service will be used as the Docker host. When setting up a Docker agent in the Jenkins Pipeline, we will have to specify the Docker host to connect to.
 
-* Deploy Docker-in-Docker to cluster:
+To deploy Docker-in-Docker to the cluster, execute the following:
 
 ```sh
 kubectl apply -f ./setup/docker-in-docker.yaml
 ```
 
-When setting up a Docker agent in the Jenkins Pipeline, we will have to specify the Docker host to connect to.
+The Docker host will cache build layers which provides the benefit of speeding future builds, however this will require more storage as the cache size increases. Please bare this in mind as it may require occasional pruning.
+
+To run Docker system prune, execute the following:
+
+```sh
+kubectl exec -it $(kubectl get pod -l app=dind -o jsonpath='{.items[0].metadata.name}') /bin/sh
+
+docker system prune -a
+```
 
 ## 4. Generate Static Kubeconfig
 
@@ -419,7 +427,7 @@ In this stage, we are deploying the application only if we are on the master bra
 }
 ```
 
-### 7.4 Build status
+### 7.4 Build Status
 
 #### 7.4.1 Send to GitHub
 
